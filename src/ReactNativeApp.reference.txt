@@ -1,0 +1,274 @@
+/**
+ * LNAS - React Native Version (Reference)
+ * Copy this code into a new Expo or React Native project.
+ * 
+ * Dependencies needed:
+ * expo install expo-file-system expo-sharing lucide-react-native react-native-reanimated react-native-gesture-handler
+ */
+
+import React, { useState, useEffect } from 'react';
+import { 
+  StyleSheet, 
+  View, 
+  Text, 
+  TouchableOpacity, 
+  ScrollView, 
+  TextInput, 
+  Alert,
+  SafeAreaView,
+  Platform
+} from 'react-native';
+import { 
+  HardDrive, 
+  Users, 
+  Settings, 
+  Share2, 
+  Upload, 
+  LayoutGrid, 
+  Info, 
+  ChevronRight, 
+  Smartphone,
+  CheckCircle2,
+  AlertCircle
+} from 'lucide-react-native';
+import Animated, { FadeIn, FadeOut, Layout } from 'react-native-reanimated';
+
+// --- Components ---
+
+const Header = ({ title }: { title: string }) => (
+  <View style={styles.header}>
+    <Text style={styles.headerTitle}>{title}</Text>
+    <Smartphone color="#a1a1aa" size={20} />
+  </View>
+);
+
+const Card = ({ children, style }: { children: React.ReactNode, style?: any }) => (
+  <View style={[styles.card, style]}>
+    {children}
+  </View>
+);
+
+// --- Main App ---
+
+export default function App() {
+  const [activeTab, setActiveTab] = useState('host');
+
+  return (
+    <SafeAreaView style={styles.container}>
+      <View style={styles.content}>
+        {activeTab === 'host' && <HostScreen />}
+        {activeTab === 'settings' && <SettingsScreen />}
+      </View>
+
+      {/* Tab Bar */}
+      <View style={styles.tabBar}>
+        <TouchableOpacity 
+          onPress={() => setActiveTab('host')}
+          style={[styles.tabItem, activeTab === 'host' && styles.tabItemActive]}
+        >
+          <HardDrive color={activeTab === 'host' ? '#09090b' : '#a1a1aa'} size={24} />
+          <Text style={[styles.tabLabel, activeTab === 'host' && styles.tabLabelActive]}>Host</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity 
+          onPress={() => setActiveTab('settings')}
+          style={[styles.tabItem, activeTab === 'settings' && styles.tabItemActive]}
+        >
+          <Settings color={activeTab === 'settings' ? '#09090b' : '#a1a1aa'} size={24} />
+          <Text style={[styles.tabLabel, activeTab === 'settings' && styles.tabLabelActive]}>Settings</Text>
+        </TouchableOpacity>
+      </View>
+    </SafeAreaView>
+  );
+}
+
+const HostScreen = () => {
+  return (
+    <ScrollView style={styles.screen}>
+      <Header title="Host Dashboard" />
+      <View style={styles.padding}>
+        <Card style={styles.heroCard}>
+          <View style={styles.iconCircle}>
+            <Share2 color="#fff" size={32} />
+          </View>
+          <Text style={styles.heroTitle}>Server Active</Text>
+          <Text style={styles.heroSubtitle}>Your phone is now a NAS</Text>
+        </Card>
+        
+        <Text style={styles.sectionTitle}>Connected Clients</Text>
+        <Card>
+          <Text style={styles.emptyText}>No clients connected yet</Text>
+        </Card>
+      </View>
+    </ScrollView>
+  );
+};
+
+const SettingsScreen = () => {
+  const [path, setPath] = useState('/storage/emulated/0/Download');
+
+  return (
+    <ScrollView style={styles.screen}>
+      <Header title="Settings" />
+      <View style={styles.padding}>
+        <Text style={styles.sectionTitle}>Storage Configuration</Text>
+        <Card>
+          <Text style={styles.cardLabel}>Destination Path</Text>
+          <TextInput 
+            style={styles.input}
+            value={path}
+            onChangeText={setPath}
+            placeholder="/path/to/folder"
+          />
+          <TouchableOpacity style={styles.button}>
+            <Text style={styles.buttonText}>Save Settings</Text>
+          </TouchableOpacity>
+        </Card>
+      </View>
+    </ScrollView>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+  },
+  content: {
+    flex: 1,
+  },
+  screen: {
+    flex: 1,
+    backgroundColor: '#fafafa',
+  },
+  padding: {
+    padding: 24,
+  },
+  header: {
+    height: 64,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 24,
+    backgroundColor: '#fff',
+    borderBottomWidth: 1,
+    borderBottomColor: '#f4f4f5',
+  },
+  headerTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#09090b',
+  },
+  card: {
+    backgroundColor: '#fff',
+    borderRadius: 24,
+    padding: 24,
+    borderWidth: 1,
+    borderColor: '#f4f4f5',
+    marginBottom: 16,
+    ...Platform.select({
+      ios: {
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.05,
+        shadowRadius: 8,
+      },
+      android: {
+        elevation: 2,
+      },
+    }),
+  },
+  heroCard: {
+    backgroundColor: '#09090b',
+    alignItems: 'center',
+    paddingVertical: 40,
+  },
+  iconCircle: {
+    width: 64,
+    height: 64,
+    borderRadius: 32,
+    backgroundColor: 'rgba(255,255,255,0.1)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 16,
+  },
+  heroTitle: {
+    color: '#fff',
+    fontSize: 24,
+    fontWeight: 'bold',
+  },
+  heroSubtitle: {
+    color: '#a1a1aa',
+    fontSize: 14,
+    marginTop: 4,
+  },
+  sectionTitle: {
+    fontSize: 10,
+    fontWeight: 'bold',
+    color: '#a1a1aa',
+    textTransform: 'uppercase',
+    letterSpacing: 1,
+    marginBottom: 16,
+    marginLeft: 4,
+  },
+  cardLabel: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#09090b',
+    marginBottom: 8,
+  },
+  input: {
+    backgroundColor: '#fafafa',
+    borderWidth: 1,
+    borderColor: '#f4f4f5',
+    borderRadius: 16,
+    padding: 16,
+    fontSize: 14,
+    color: '#09090b',
+  },
+  button: {
+    backgroundColor: '#09090b',
+    borderRadius: 16,
+    padding: 16,
+    alignItems: 'center',
+    marginTop: 24,
+  },
+  buttonText: {
+    color: '#fff',
+    fontWeight: 'bold',
+    textTransform: 'uppercase',
+    letterSpacing: 1,
+    fontSize: 12,
+  },
+  emptyText: {
+    textAlign: 'center',
+    color: '#a1a1aa',
+    fontSize: 14,
+  },
+  tabBar: {
+    height: 80,
+    flexDirection: 'row',
+    backgroundColor: '#fff',
+    borderTopWidth: 1,
+    borderTopColor: '#f4f4f5',
+    paddingBottom: Platform.OS === 'ios' ? 20 : 0,
+  },
+  tabItem: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  tabItemActive: {
+    // Optional active state styling
+  },
+  tabLabel: {
+    fontSize: 10,
+    fontWeight: '500',
+    color: '#a1a1aa',
+    marginTop: 4,
+  },
+  tabLabelActive: {
+    color: '#09090b',
+    fontWeight: 'bold',
+  },
+});

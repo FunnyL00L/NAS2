@@ -1,0 +1,9 @@
+{
+  "name": "LNAS 2",
+  "description": "A mobile NAS server that allows other devices to transfer files to this phone via Wi-Fi.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone",
+    "geolocation"
+  ]
+}

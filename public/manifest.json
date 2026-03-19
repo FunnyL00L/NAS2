@@ -1,0 +1,21 @@
+{
+  "name": "LNAS - Local Network Asset Sync",
+  "short_name": "LNAS",
+  "description": "Sync files across local network devices easily.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#09090b",
+  "icons": [
+    {
+      "src": "https://picsum.photos/seed/lnas/192/192",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://picsum.photos/seed/lnas/512/512",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
